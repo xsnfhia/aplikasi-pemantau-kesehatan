@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Pelacak Kesehatan</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<h1>Health Tracker Predictions</h1>
+
+<!-- BMI Prediction Form -->
+<h3>BMI Prediction</h3>
+<form id="bmiForm">
+    <label for="bmiHeight"></label><input type="number" id="bmiHeight" placeholder="Height (cm)" required>
+    <label for="bmiWeight"></label><input type="number" id="bmiWeight" placeholder="Weight (kg)" required>
+    <label for="bmiSex"></label><input type="number" id="bmiSex" placeholder="Sex (1=Male, 0=Female)" required>
+    <button type="submit">Predict BMI</button>
+</form>
+
+<div id="bmiResult" style="display:none;">
+    <h4>BMI Prediction Result:</h4>
+    <p id="bmiValue"></p>
+    <p id="bmiCategory"></p>
+    <p id="bmiAdvice"></p>
+</div>
+
+<!-- Heart Disease Prediction Form -->
+<h3>Heart Disease Prediction</h3>
+<form id="heartForm">
+    <label for="age"></label><input type="number" id="age" placeholder="Age" required>
+    <label for="cholesterol"></label><input type="number" id="cholesterol" placeholder="Cholesterol Level" required>
+    <label for="bloodPressure"></label><input type="number" id="bloodPressure" placeholder="Blood Pressure" required>
+    <button type="submit">Predict Heart Disease</button>
+</form>
+
+<div id="heartResult" style="display:none;">
+    <h4>Heart Disease Prediction Result:</h4>
+    <p id="heartPrediction"></p>
+    <p id="heartCategory"></p>
+    <p id="heartAdvice"></p>
+</div>
+
+<script>
+    document.getElementById("bmiForm").onsubmit = async (e) => {
+        e.preventDefault();
+        const height = document.getElementById("bmiHeight").value;
+        const weight = document.getElementById("bmiWeight").value;
+        const sex = document.getElementById("bmiSex").value;
+
+        const response = await fetch("http://127.0.0.1:5000/predict_bmi", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ height, weight, sex })
+        });
+        const result = await response.json();
+
+        document.getElementById("bmiValue").innerText = "BMI Anda: " + result.prediction.toFixed(2);
+        document.getElementById("bmiCategory").innerText = "Kategori BMI: " + result.bmi_category;
+        document.getElementById("bmiAdvice").innerText = "Saran: " + result.advice;
+        document.getElementById("bmiResult").style.display = "block";  
+    };
+
+    document.getElementById("heartForm").onsubmit = async (e) => {
+        e.preventDefault();
+        const age = document.getElementById("age").value;
+        const cholesterol = document.getElementById("cholesterol").value;
+        const bloodPressure = document.getElementById("bloodPressure").value;
+
+        const response = await fetch("http://127.0.0.1:5000/predict_heart", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ age, cholesterol, bloodPressure })
+        });
+        const result = await response.json();
+
+        document.getElementById("heartPrediction").innerText = "Skor Risiko Penyakit Jantung: " + result.prediction.toFixed(2);
+        document.getElementById("heartCategory").innerText = "Kategori Risiko: " + result.disease_category;
+        document.getElementById("heartAdvice").innerText = "Saran: " + result.advice;
+        document.getElementById("heartResult").style.display = "block";  
+    };
+</script>
+</body>
+</html>
+
