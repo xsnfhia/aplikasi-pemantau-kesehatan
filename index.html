@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<h1>Health Prediction</h1>
+
+<!-- Form untuk input BMI -->
+<h2>Predict BMI</h2>
+<form id="bmi-form">
+    <label for="height">Height (cm):</label>
+    <input type="number" id="height" required>
+    <br><br>
+    <label for="weight">Weight (kg):</label>
+    <input type="number" id="weight" required>
+    <br><br>
+    <label for="sex">Sex (1 = Male, 0 = Female):</label>
+    <input type="number" id="sex" required>
+    <br><br>
+    <button type="submit">Predict BMI</button>
+</form>
+<div id="bmi-result"></div>
+
+<!-- Form untuk input Heart Disease -->
+<h2>Predict Heart Disease</h2>
+<form id="heart-form">
+    <label for="age">Age:</label>
+    <input type="number" id="age" required>
+    <br><br>
+    <label for="cholesterol">Cholesterol:</label>
+    <input type="number" id="cholesterol" required>
+    <br><br>
+    <label for="bloodPressure">Blood Pressure:</label>
+    <input type="number" id="bloodPressure" required>
+    <br><br>
+    <button type="submit">Predict Heart Disease</button>
+</form>
+<div id="heart-result"></div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
